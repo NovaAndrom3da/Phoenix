@@ -53,7 +53,7 @@ def assign(app, url="/", cache={}, view_funcs=[]):
   # Gzip Compress
   if config["gzip"]:
     if config["verbose"]:
-      print(f"Compressing {url}...")
+      print(f"[Build] Compressing {url}...")
     if type(cont) == str:
       cont = cont.encode("utf-8")
     cont = gzip.compress(cont)
@@ -66,7 +66,7 @@ def assign(app, url="/", cache={}, view_funcs=[]):
     ret.headers["Content-Encoding"] = 'gzip'
     ret.headers["Content-length"] = len(cont)
     if config["verbose"]:
-      print(f"Done comrpessing {url}")
+      print(f"[Build] Done comrpessing {url}")
 
   
   server_route_functions[url] = lambda : ret
@@ -77,11 +77,11 @@ def assign(app, url="/", cache={}, view_funcs=[]):
 
   
 def run(host=config["host"], port=config["port"], indexDirectories=config["indexDirectories"], rebuild=config["canrebuild"]):
-  print("Building server...")
+  print("[Init] Building server...")
   loadextensions()
   cache = build.build(indexDirectories, config, extensions=extensions)
   
-  print("Done. Initializing server...")
+  print("[Init] Done. Initializing server...")
   app = NoJSServer(__name__)
   if rebuild:
     @app.route("/nojs/rebuild")
@@ -90,12 +90,13 @@ def run(host=config["host"], port=config["port"], indexDirectories=config["index
       view_funcs = []
       for f in cache.keys():
         assign(app, f, cache, view_funcs)
-      return "Rebuild completed."
+      return "[Note] Rebuild completed."
+
   view_funcs = []
   for f in cache.keys():
     assign(app, f, cache, view_funcs)
 
-  print(f"Done. Starting server on port {port}...")
+  print(f"[Init] Done. Starting server on port {port}...")
   app.run(host, port)
 
 @click.command()

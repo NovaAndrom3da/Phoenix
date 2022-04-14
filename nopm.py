@@ -21,23 +21,25 @@ def install_module(pkg="", version="latest"):
     version_out = version
     if version == "latest":
       version = urllib.request.urlopen(f'{__URL__}/modules/{niceurl(pkg)}/latest.txt').read().decode()
-    response = urllib.request.urlopen(f"{__URL__}/modules/{niceurl(pkg)}/{niceurl(version)}.js")
+    response = urllib.request.urlopen(f"{__URL__}/modules/{niceurl(pkg)}/{niceurl(version)}.tar.xz")
     status = response.getcode()
 
-    os.mkdir(f"nojs_files/modules/{pkg}")
-    file = open(f"nojs_files/modules/{pkg}/{version_out}.js", "w")
-    file.write(response.read().decode())
-    file.close()
+    tar = tarfile.open(pkg+".tar.xz", mode="r|xz", fileobj=response)
+    tar.extractall(f"nojs_files/modules/{niceurl(pkg)}_{version_out}")
+    tar.close()
     return True
   print(f"[Okay] '{pkg}' is already installed")
   
-def install_extension(pkg, version):
+def install_extension(pkg="", version="latest"):
   if not os.path.exists(f"nojs_files/extensions/{pkg}.js"):
+    version_out = version
+    if version == "latest":
+      version = urllib.request.urlopen(f'{__URL__}/extensions/{niceurl(pkg)}/latest.txt').read().decode()
     response = urllib.request.urlopen(f"{__URL__}/extensions/{niceurl(pkg)}/{niceurl(version)}.tar.xz")
     status = response.getcode()
 
     tar = tarfile.open(pkg+".tar.xz", mode="r|xz", fileobj=response)
-    tar.extractall(f"nojs_files/extensions/{niceurl(pkg)}")
+    tar.extractall(f"nojs_files/extensions/{niceurl(pkg)}_{version_out}")
     tar.close()
     return True
   print(f"[Okay] '{pkg}' is already installed")
