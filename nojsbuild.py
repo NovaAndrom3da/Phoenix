@@ -13,40 +13,44 @@ def readfile(dir):
     "cont": data
   }
 
-def directoryTraverse(dir="./", urldir="/", indexDirectories=False, cache={}):
+def directoryTraverse(dir="./", urldir="/", indexDirectories=False, cache={}, verbose=False, extensions=[]):
   index_dir = ""
   dir_ls = os.listdir(dir)
   for f in dir_ls:
-    print("reading "+f)
+    if verbose:
+      print("reading "+dir+f+" ("+urldir+f+")")
     if os.path.isfile(dir+f):
       cache[urldir+f] = readfile(dir+f)
       if indexDirectories:
         index_dir += f"<a href='{urldir+f}'>File: {f}</a><br>"
-        print("indexed file "+f)
+        if verbose:
+          print("indexed file "+dir+f+" ("+urldir+f+")")
     else:
       directoryTraverse(dir+f+"/", urldir+f+"/", indexDirectories, cache)
-      if indexDirectories:
+      if os.path.exists(dir+f+"index.html") and os.path.isfile(dir+f+"index.html"):
+        pass
+      elif indexDirectories:
         index_dir += f"<a href='{urldir+f}'>Dir: {f}</a><br>"
-        print("indexed subdir "+f)
+        if verbose:
+          print("indexed subdir "+dir+f+" ("+urldir+f+")")
+    
     cache[urldir] = {
       "mime": "text/html",
       "cont": f"<!DOCTYPE html><html><body><h1>Index of {urldir}</h1><div>{index_dir}</div></body></html>"
     }
 
-def build(indexDirectories=False, cache={}):
+def build(indexDirectories=False, config={}, cache={}, extensions={}):
   # ./public/
   if os.path.exists("public"):
-    directoryTraverse("public/", "/", indexDirectories, cache)
-#    root_public = os.listdir("public")
- #   for i in root_public:
-  #    print(root_public[i])
+    directoryTraverse("public/", "/", indexDirectories, cache, config["verbose"])
 
   # ./src/
   if os.path.exists("src"):
-    directoryTraverse("src/", "/src/", indexDirectories, cache)
-#    root_src = os.listdir("src")
- #   for i in root_src:
-  #    print(root_src[i])
+    directoryTraverse("src/", "/src/", indexDirectories, cache, config["verbose"])
+
+  # ./nojs/
+  if os.path.exists("nojs"):
+    directoryTraverse("nojs/", "/nojs/", False, cache, config["verbose"])
 
   # ./index.html
   if os.path.exists("index.html") and os.path.isfile("index.html"):
@@ -61,5 +65,10 @@ def build(indexDirectories=False, cache={}):
       "mime": "text/html",
       "cont": "<!DOCTYPE html>\n<html><head></head><body></body></html>"
     }
-    
+
+  for extension in extensions.keys():
+    try:
+      cache = extension.build(cache)
+    except:
+      pass
   return cache

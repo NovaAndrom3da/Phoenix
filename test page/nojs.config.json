@@ -1,0 +1,6 @@
+{
+  "host": true,
+  "port": 80,
+  "canrebuild": true,
+  "indexDirectories": true
+}
