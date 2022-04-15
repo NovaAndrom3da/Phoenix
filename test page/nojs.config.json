@@ -6,5 +6,8 @@
   "verbose": true,
   "args": {
     "title": "NoJS Website"
-  }
+  },
+  "argfiles": [
+    "/"
+  ]
 }

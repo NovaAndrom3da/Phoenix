@@ -39,7 +39,8 @@ def directoryTraverse(dir="./", urldir="/", indexDirectories=False, cache={}, ve
     try: # For directories that neither have an index.html *or* directory indexing
       cache[urldir] = {
         "mime": "text/html",
-        "cont": cont
+        "cont": cont,
+        "args": [[], config["args"].keys()][urldir in config["argfiles"]]
       }
     except:
       pass

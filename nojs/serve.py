@@ -24,7 +24,8 @@ config = { # Set default config settings
   "gzip": True,
   "gzip_dynamic_pages": False, # is always false if gzip is false
   "gzip_encoding": "utf-8",
-  "args": {}
+  "args": {},
+  "argfiles": []
 }
 
 if os.path.exists("nojs.config.json") and os.path.isfile("nojs.config.json"):
@@ -52,9 +53,9 @@ server_route_functions = {}
 def assign(app, url="/", cache={}, view_funcs=[]):
   # Get content
   cont = cache[url]["cont"]
-  
+
   if not "args" in cache[url]: cache[url]["args"] = config["args"].keys() #[] # autoupgrade to blank arguments
-  if type(cont) != str: # cache[url]["args"] == [] or
+  if cache[url]["args"] == []or type(cont) != str: # cache[url]["args"] == [] or
     # Gzip Compress
     if config["gzip"]:
       if config["verbose"]:
