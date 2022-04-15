@@ -28,7 +28,7 @@ setup(
     "waitress",
     "click",
     "colorama"
-  ]
+  ],
   entry_points={
     "console_scripts": [
       "nopm=nopm.__main__:main",
