@@ -3,11 +3,5 @@
   "port": 80,
   "canrebuild": true,
   "indexDirectories": true,
-  "verbose": true,
-  "args": {
-    "title": "NoJS Website"
-  },
-  "argfiles": [
-    "/"
-  ]
+  "verbose": true
 }
