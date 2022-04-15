@@ -93,6 +93,7 @@ def assign(app, url="/", cache={}, view_funcs=[]):
           config["args"][arg] = ""
         cache[url]["cont"] = cont.replace("${{"+arg+"}}", config["args"][arg])
     if len(session_args) == 0:
+      print(type(cache[url]["cont"]))
       assign(app, url, cache, view_funcs)
       return
 
