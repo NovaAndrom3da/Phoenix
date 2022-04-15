@@ -5,7 +5,7 @@ HERE = pathlib.Path(__file__).parent
 README = (HERE / "README.md").read_text()
 
 setup(
-  name="nojs",
+  name="nopm",
   version="0.0.1",
   description="An alternative web server and package manager",
   long_description=README,
