@@ -6,7 +6,7 @@ README = (HERE / "README.md").read_text()
 
 setup(
   name="nopm",
-  version="0.1.1",
+  version="0.1.2",
   description="An alternative web server and package manager",
   long_description=README,
   long_description_content_type="text/markdown",
@@ -15,8 +15,7 @@ setup(
   author_email="",
   license="BASED",
   classifiers=[
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3"
   ],
   packages=[
     "nojs",
