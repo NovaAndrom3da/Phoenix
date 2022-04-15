@@ -1,5 +1,5 @@
 # Get NoJS files
-imfrom . import nojsbuild as build
+from . import nojsbuild as build
 import nopm
 
 # Get required assets
