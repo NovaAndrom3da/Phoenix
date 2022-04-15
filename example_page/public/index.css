@@ -1,9 +1,13 @@
 html {
-  color: rgb(255,0,255);
+  color: #1e1e1e;
   font-family: calibri;
 }
 
 code, pre {
   color: #000000;
   background-color(200,200,200);
+}
+
+.header {
+  justify-self: center;
 }

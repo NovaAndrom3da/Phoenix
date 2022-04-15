@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/index.css" />
+    <title>NoJS</title>
+  </head>
+  <body>
+    <h1 class="header">NoJS</h1>
+    <h2 class="header">The next generation of web development</h2>
+    <h3>Get started</h3>
+    <h4>Pip Install</h4>
+    <pre>
+      pip install nopm
+    </pre>
+    <h3>Use it</h3>
+    <p>Create a folder called <code>public</code> containing all of your server assets. Then you can create a file called <code>nojs.config.json</code> with configurable settings.
+    You can then run it with <code>python -m nojs</code></p>
+    <p>Due to reasons, the <code>nojs</code>/<code>python -m nojs</code> and<code>nopm</code>/<code>python -m nopm</code> methods are not currently working. They can be accessed by doing:</p>  
+    <pre>
+      python
+      import nojs, nopm # Load the nojs modules
+      nopm.i("package") # Install a package
+      nopm.r("package") # Uninstall a package
+      nojs.run() # Start the server
+    </pre>
+  </body>
+</html>
