@@ -91,7 +91,7 @@ def assign(app, url="/", cache={}, view_funcs=[]):
         if not arg in config["args"]:
           print(f"[Warn] Unassigned static variable '{arg}'")
           config["args"][arg] = ""
-        cache[url["cont"] = cont.replace("${{"+arg+"}}", config["args"][arg])
+        cache[url]["cont"] = cont.replace("${{"+arg+"}}", config["args"][arg])
     if len(session_args) == 0:
       assign(app, url, cache, view_funcs)
       return
