@@ -53,8 +53,8 @@ def assign(app, url="/", cache={}, view_funcs=[]):
   # Get content
   cont = cache[url]["cont"]
   
-  if !("args" in cache[url]): cache[url]["args"] = [] # autoupgrade to blank arguments
-  if cache[url]["args"] == [] or type(cont) != str:
+  if !("args" in cache[url]): cache[url]["args"] = config["args"].keys() #[] # autoupgrade to blank arguments
+  if type(cont) != str: # cache[url]["args"] == [] or
     # Gzip Compress
     if config["gzip"]:
       if config["verbose"]:
@@ -124,6 +124,7 @@ def assign(app, url="/", cache={}, view_funcs=[]):
     server_route_functions[url].__name__ = name
     server_route_functions[url].__qualname__ = name
     view_funcs.append(app.route(url)(server_route_functions[url]))
+    
 
   
 def run(host=config["host"], port=config["port"], indexDirectories=config["indexDirectories"], rebuild=config["canrebuild"]):
