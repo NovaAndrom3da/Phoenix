@@ -6,7 +6,7 @@ README = (HERE / "README.md").read_text()
 
 setup(
   name="nopm",
-  version="0.0.2",
+  version="0.1.0",
   description="An alternative web server and package manager",
   long_description=README,
   long_description_content_type="text/markdown",

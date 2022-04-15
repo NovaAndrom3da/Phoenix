@@ -1,1 +1,1 @@
-from .serve import run, cache
+from .serve import run
