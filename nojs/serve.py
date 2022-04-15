@@ -81,7 +81,7 @@ def assign(app, url="/", cache={}, view_funcs=[]):
     view_funcs.append(app.route(url)(server_route_functions[url]))
   else:
     session_args = []
-    if type(config["args"] != dict):
+    if type(config["args"]) != dict:
       print(f"[Warn] Static variables are of wrong type ('{type(config['args'])}') not 'dict'")
       config["args"] = {}
     for arg in cache[url]["args"]:
