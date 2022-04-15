@@ -53,7 +53,7 @@ def assign(app, url="/", cache={}, view_funcs=[]):
   # Get content
   cont = cache[url]["cont"]
   
-  if !("args" in cache[url]): cache[url]["args"] = config["args"].keys() #[] # autoupgrade to blank arguments
+  if not "args" in cache[url]: cache[url]["args"] = config["args"].keys() #[] # autoupgrade to blank arguments
   if type(cont) != str: # cache[url]["args"] == [] or
     # Gzip Compress
     if config["gzip"]:
@@ -88,7 +88,7 @@ def assign(app, url="/", cache={}, view_funcs=[]):
       if arg.startswith("session:"):
         session_args.append(arg.lstrip("session:"))
       else:
-        if !(arg in config["args"]):
+        if not arg in config["args"]:
           print(f"[Warn] Unassigned static variable '{arg}'")
           config["args"][arg] = ""
         cache[url["cont"] = cont.replace("${{"+arg+"}}", config["args"][arg])
@@ -101,7 +101,7 @@ def assign(app, url="/", cache={}, view_funcs=[]):
       print(f"[Note] gzip is enabled for dynamic page '{url}'. This may take more time to compute")
       def dynamic_arg_page():
         for arg in session_args:
-          if !(arg in session.keys()):
+          if not arg in session.keys():
             print(f"[Warn] Session argument '{arg}' not in session keys")
           else:
             cont = cont.replace("${{session:"+arg+"}}", session[arg])
@@ -113,7 +113,7 @@ def assign(app, url="/", cache={}, view_funcs=[]):
     else:
       def dynamic_arg_page():
         for arg in session_args:
-          if !(arg in session.keys()):
+          if not arg in session.keys():
             print(f"[Warn] Session argument '{arg}' not in session keys")
           else:
             cont = cont.replace("${{session:"+arg+"}}", session[arg])
