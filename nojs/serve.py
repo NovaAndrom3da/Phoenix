@@ -82,7 +82,7 @@ def assign(app, url="/", cache={}, view_funcs=[]):
   else:
     session_args = []
     if type(config["args"] != dict):
-      print(f"[Warn] Static variables are of wrong type ('{type(config['args']}') not 'dict'")
+      print(f"[Warn] Static variables are of wrong type ('{type(config['args'])}') not 'dict'")
       config["args"] = {}
     for arg in cache[url]["args"]:
       if arg.startswith("session:"):
