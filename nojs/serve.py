@@ -5,7 +5,7 @@ import nopm
 # Get required assets
 from flask import Flask, Response, session
 from waitress import serve as WSGI_SERVER
-import click, random, os, json, gzip, urllib.request
+import click, random, os, json, gzip, urllib.request, zlib
 
 # Initate run function
 class NoJSServer(Flask):
@@ -21,8 +21,10 @@ config = { # Set default config settings
   "canrebuild": False,
   "indexDirectories": False,
   "verbose": False,
+  "zlib": True,
   "gzip": True,
-  "gzip_encoding": "utf-8"
+  "encoding": "utf-8",
+  "nocompress": []
 }
 
 if os.path.exists("nojs.config.json") and os.path.isfile("nojs.config.json"):
@@ -52,20 +54,45 @@ def assign(app, url="/", cache={}, view_funcs=[]):
   cont = cache[url]["cont"]
 
   # Gzip Compress
-  if config["gzip"]:
+  if not url in config["nocompress"]:
+    if config["zlib"] and config["gzip"]:
+      if config["verbose"]:
+        print(f"[Prehost] Compressing {url} (mode: zlib, gzip)...")
+      if type(cont) == str:
+        cont = cont.encode(config["encoding"])
+        cont = gzip.compress(zlib.compress(cont))
+    elif config["zlib"]:
+      if config["verbose"]:
+        print(f"[Prehost] Compressing {url} (mode: zlib)...")
+      if type(cont) == str:
+        cont = cont.encode(config["encoding"])
+        cont = zlib.compress(cont)
+    elif config["gzip"]:
+      if config["verbose"]:
+        print(f"[Prehost] Compressing {url} (mode: gzip)...")
+      if type(cont) == str:
+        cont = cont.encode(config["enoding"])
+        cont = gzip.compress(cont)
+  else:
     if config["verbose"]:
-      print(f"[Build] Compressing {url}...")
-    if type(cont) == str:
-      cont = cont.encode(config["gzip_encoding"])
-      cont = gzip.compress(cont)
-
+      print(f"[Prehost] Skipping compression for {url}")
+  
   ret = Response(cont, status=200, mimetype=cache[url]["mime"])
+  ret.headers["Content-Length"] = len(cont)
 
-  if config["gzip"]:
-    ret.headers["Content-Encoding"] = 'gzip'
-    ret.headers["Content-length"] = len(cont)
-    if config["verbose"]:
-      print(f"[Build] Done comrpessing {url}")
+  if not url in config["nocompress"]:
+    if config["zlib"] and config["gzip"]:
+      ret.headers["Content-Encoding"] = 'deflate, gzip'
+      if config["verbose"]:
+        print(f"[Prehost] Done compressing {url} (mode: zlib, gzip)")
+    elif config["zlib"]:
+      ret.headers["Content-Encoding"] = 'deflate'
+      if config["verbose"]:
+        print(f"[Prehost] Done compressing {url} (mode: zlib)")
+    elif config["gzip"]:
+      ret.headers["Content-Encoding"] = 'gzip'
+      if config["verbose"]:
+        print(f"[Prehost] Done comrpessing {url} (mode: gzip)")
 
   
   server_route_functions[url] = lambda : ret
