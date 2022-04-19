@@ -24,7 +24,8 @@ config = { # Set default config settings
   "zlib": True,
   "gzip": True,
   "encoding": "utf-8",
-  "nocompress": []
+  "nocompress": [],
+  "purgecache": True
 }
 
 if os.path.exists("nojs.config.json") and os.path.isfile("nojs.config.json"):
@@ -60,19 +61,19 @@ def assign(app, url="/", cache={}, view_funcs=[]):
         print(f"[Prehost] Compressing {url} (mode: zlib, gzip)...")
       if type(cont) == str:
         cont = cont.encode(config["encoding"])
-        cont = gzip.compress(zlib.compress(cont))
+      cont = gzip.compress(zlib.compress(cont))
     elif config["zlib"]:
       if config["verbose"]:
         print(f"[Prehost] Compressing {url} (mode: zlib)...")
       if type(cont) == str:
         cont = cont.encode(config["encoding"])
-        cont = zlib.compress(cont)
+      cont = zlib.compress(cont)
     elif config["gzip"]:
       if config["verbose"]:
         print(f"[Prehost] Compressing {url} (mode: gzip)...")
       if type(cont) == str:
         cont = cont.encode(config["enoding"])
-        cont = gzip.compress(cont)
+      cont = gzip.compress(cont)
   else:
     if config["verbose"]:
       print(f"[Prehost] Skipping compression for {url}")
@@ -123,6 +124,11 @@ def run(host=config["host"], port=config["port"], indexDirectories=config["index
   for f in cache.keys():
     assign(app, f, cache, view_funcs)
 
+  if config["purgecache"]:
+    print("[Clean] Clearing cache")
+    del(cache)
+    print("[Clean] Done clearing cache")
+  
   print(f"[Init] Done. Starting server on port {port}...")
   app.run(host, port)
 
