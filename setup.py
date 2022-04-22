@@ -6,7 +6,7 @@ README = (HERE / "README.md").read_text()
 
 setup(
   name="nopm",
-  version="0.2.0",
+  version="0.3.0",
   description="An alternative web server and package manager",
   long_description=README,
   long_description_content_type="text/markdown",
@@ -26,7 +26,8 @@ setup(
     "flask",
     "waitress",
     "click",
-    "colorama"
+    "colorama",
+    "css-html-js-minify"
   ],
   entry_points={
     "console_scripts": [

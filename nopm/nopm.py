@@ -7,7 +7,7 @@ def init():
   for path in pathgen:  
     if not os.path.exists(path):
       os.mkdir(path)
-  filegen = ["package.json"]
+  filegen = ["nojs.package.json"]
   for file in filegen:
     if not os.path.exists(file):
       open(file, 'w').close()
@@ -16,12 +16,12 @@ def init():
 def niceurl(string=""):
   return string.replace("/", "_").replace("-", "_")
 
-def install_module(pkg="", version="latest"):
+def install_module(pkg="", version="latest", repourl=__URL__):
   if not os.path.exists(f"nojs_files/modules/{pkg}"):
     version_out = version
     if version == "latest":
-      version = urllib.request.urlopen(f'{__URL__}/modules/{niceurl(pkg)}/latest.txt').read().decode()
-    response = urllib.request.urlopen(f"{__URL__}/modules/{niceurl(pkg)}/{niceurl(version)}.tar.xz")
+      version = urllib.request.urlopen(f'{repourl}/modules/{niceurl(pkg)}/latest.txt').read().decode()
+    response = urllib.request.urlopen(f"{repourl}/modules/{niceurl(pkg)}/{niceurl(version)}.tar.xz")
     status = response.getcode()
 
     tar = tarfile.open(pkg+".tar.xz", mode="r|xz", fileobj=response)
@@ -30,12 +30,12 @@ def install_module(pkg="", version="latest"):
     return True
   print(f"[Okay] '{pkg}' is already installed")
   
-def install_extension(pkg="", version="latest"):
+def install_extension(pkg="", version="latest", repourl=__URL__):
   if not os.path.exists(f"nojs_files/extensions/{pkg}.js"):
     version_out = version
     if version == "latest":
-      version = urllib.request.urlopen(f'{__URL__}/extensions/{niceurl(pkg)}/latest.txt').read().decode()
-    response = urllib.request.urlopen(f"{__URL__}/extensions/{niceurl(pkg)}/{niceurl(version)}.tar.xz")
+      version = urllib.request.urlopen(f'{repourl}/extensions/{niceurl(pkg)}/latest.txt').read().decode()
+    response = urllib.request.urlopen(f"{repourl}/extensions/{niceurl(pkg)}/{niceurl(version)}.tar.xz")
     status = response.getcode()
 
     tar = tarfile.open(pkg+".tar.xz", mode="r|xz", fileobj=response)
@@ -44,20 +44,20 @@ def install_extension(pkg="", version="latest"):
     return True
   print(f"[Okay] '{pkg}' is already installed")
   
-def install(pkg="", version="latest", type="*"): # version to be implemented
+def install(pkg="", version="latest", type="*", repourl=__URL__): # version to be implemented
   init()
   pkg = pkg.strip().lstrip()
   type = type.lower()
   try:
     if type == "*":
       try:
-        if install_module(pkg, version): return
+        if install_module(pkg, version, repourl): return
       except:
-        if install_extension(pkg, version): return
+        if install_extension(pkg, version, repourl): return
     elif type == "module" or type == "mod" or type == "m":
-      install_module(pkg, version)
+      install_module(pkg, version, repourl)
     elif type == "extension" or type == "ext" or type == "e":
-      install_extension(pkg, version)
+      install_extension(pkg, version, repourl)
     
     print(f"[Okay] '{pkg}' installed sucessfully")
 

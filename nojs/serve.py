@@ -3,14 +3,9 @@ from . import nojsbuild as build
 import nopm
 
 # Get required assets
-from flask import Flask, Response, session
+from flask import Flask, Response, session, request
 from waitress import serve as WSGI_SERVER
-import click, random, os, json, gzip, urllib.request, zlib
-
-# Initate run function
-class NoJSServer(Flask):
-  def run(self, host=False, port=8080):
-    return WSGI_SERVER(self, host=['localhost', '0.0.0.0'][host], port=port)
+import click, random, os, json, gzip, urllib.request, zlib, sys
 
 
 # Configuration
@@ -25,7 +20,9 @@ config = { # Set default config settings
   "gzip": True,
   "encoding": "utf-8",
   "nocompress": [],
-  "purgecache": True
+  "purgecache": True,
+  "minify": True,
+  "proxy": {}
 }
 
 if os.path.exists("nojs.config.json") and os.path.isfile("nojs.config.json"):
@@ -34,6 +31,12 @@ if os.path.exists("nojs.config.json") and os.path.isfile("nojs.config.json"):
   configfile.close()
   for i in configcont.keys():
     config[i] = configcont[i]
+
+
+# Initate run function
+class NoJSServer(Flask):
+  def run(self, host=False, port=8080):
+    return WSGI_SERVER(self, host=['localhost', '0.0.0.0'][host], port=port, ident="NoJS")
 
 
 # Extensions
@@ -100,9 +103,27 @@ def assign(app, url="/", cache={}, view_funcs=[]):
   name = f"server_route_func_{url.replace('/', '_').replace('.', '_')}_{random.randint(0, 10000000)}"
   server_route_functions[url].__name__ = name
   server_route_functions[url].__qualname__ = name
+  cache[url]["view_func"] = len(view_funcs)
   view_funcs.append(app.route(url)(server_route_functions[url]))   
 
+def assign_proxy(app, url="/", proxy="localhost:3000", cache={}, view_funcs=[]):
+  def server_proxy_index():
+    return urllib.request.urlopen(proxy).read()
   
+  def server_proxy_subpath(suburl):
+    return urllib.request.urlopen(f"{proxy}/{suburl}").read()
+
+  name_index = f"server_route_func_proxy_index_{url.replace('/', '_').replace('.', '_')}_{random.randint(0, 10000000)}"
+  server_proxy_index.__name__ = name_index
+  server_proxy_index.__qualname__ = name_index
+
+  name_subpath = f"server_route_func_proxy_path_{url.replace('/', '_').replace('.', '_')}_{random.randint(0, 10000000)}"
+  server_proxy_subpath.__name__ = name_subpath
+  server_proxy_subpath.__qualname__ = name_subpath
+
+  view_funcs.append(app.route(url)(server_proxy_index))
+  view_funcs.append(app.route("<path:url>")(server_proxy_subpath))
+
 def run(host=config["host"], port=config["port"], indexDirectories=config["indexDirectories"], rebuild=config["canrebuild"]):
   print("[Init] Building server...")
   loadextensions()
@@ -114,15 +135,29 @@ def run(host=config["host"], port=config["port"], indexDirectories=config["index
   if rebuild:
     @app.route("/nojs/rebuild")
     def nojs_rebuild(): # to be fixed
-      cache = build.build(indexDirectories)
+      if config["verbose"]:
+        print("[Rebuild] Starting rebuild.")
+      view_funcs = []
+      cache = build.build(indexDirectories, config, extensions=extensions)
+      for f in cache.keys():
+        assign(app, f, cache, view_funcs)
+      if config["verbose"]:
+        print("[Rebuild] Rebuild finished.")
       view_funcs = []
       for f in cache.keys():
         assign(app, f, cache, view_funcs)
-      return "[Note] Rebuild completed."
+      if config["purgecache"]:
+        print("[Clean] Clearing cache")
+        del(cache)
+        print("[Clean] Done clearing cache")
+      return "[Rebuild] Rebuild finished."
 
   view_funcs = []
   for f in cache.keys():
     assign(app, f, cache, view_funcs)
+
+  for proxy_route in config["proxy"].keys():
+    assign_proxy(app, proxy_route, config["proxy"][proxy_route], cache, view_funcs)
 
   if config["purgecache"]:
     print("[Clean] Clearing cache")
@@ -130,7 +165,13 @@ def run(host=config["host"], port=config["port"], indexDirectories=config["index
     print("[Clean] Done clearing cache")
   
   print(f"[Init] Done. Starting server on port {port}...")
-  app.run(host, port)
+  try:
+    app.run(host, port)
+  except KeyboardInterrupt:
+    print("[Stop] Terminated by user")
+  except Exception as kill_err:
+    print(f"[Stop] {e}")
+
 
 if __name__ == "__main__":
   run()
