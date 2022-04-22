@@ -1,6 +1,6 @@
 __URL__ = "https://nojs-repo.vercel.app"
 
-import os, urllib.request, tarfile, tempfile, shutil
+import os, urllib.request, tarfile, shutil
 
 def init():
   pathgen = ["nojs_files", "nojs_files/modules", "nojs_files/extensions"]
