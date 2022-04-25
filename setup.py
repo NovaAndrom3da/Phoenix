@@ -35,4 +35,5 @@ setup(
       "nojs=nojs.__main__:main"
     ]
   },
+  license_files = ("LICENSE.md",)
 )
