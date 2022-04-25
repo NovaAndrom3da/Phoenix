@@ -36,6 +36,8 @@ NoJS can be configured per-project with a `nojs.config.json` file. Here are the 
 >
 > `indexDirectories` (`bool`, `false`) - Display the directory's contents if no file is specified.
 >
+> `indexNoJS` (`bool`, `false`) - Index the `/nojs/` directory.
+>
 > `encoding` (`str`, `utf-8`) - Set the text encoding.
 >
 > `nocompress` (`list`, `[]`) - Disable compression on specific files. Each item of the list is the resource's URL.

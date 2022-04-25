@@ -34,24 +34,22 @@ def directoryTraverse(dir="./", urldir="/", indexDirectories=False, cache={}, co
       cache[urldir+f] = readfile(dir+f, config)
       if indexDirectories:
         index_dir += f"<a href='{urldir+f}'>File: {f}</a><br>"
+        print("heehoo "+urldir+f)
         if config["verbose"]:
           print(f"[Build] indexed file {dir+f} ({urldir+f})")
     else:
       directoryTraverse(dir+f+"/", urldir+f+"/", indexDirectories, cache, config)
       if os.path.exists(dir+f+"/index.html") and os.path.isfile(dir+f+"/index.html"):
-        cont = readfile(dir+f+"/index.html", config)
+        cache[urldir+f+'/'] = readfile(dir+f+"/index.html", config)
       elif indexDirectories:
+        print('heehoo '+urldir+f)
         index_dir += f"<a href='{urldir+f}'>Dir: {f}</a><br>"
         if config["verbose"]:
           print("[Build] indexed subdir "+dir+f+" ("+urldir+f+")")
-        cont = f"<!DOCTYPE html><html><body><h1>Index of {urldir}</h1><div>{index_dir}</div></body></html>"
-    try: # For directories that neither have an index.html *or* directory indexing
-      cache[urldir] = {
-        "mime": "text/html",
-        "cont": cont
-      }
-    except:
-      pass
+  try:
+    cache[urldir] = {"mime": "text/html", "cont": f"<!DOCTYPE html><html><body><h1>Index of {urldir}</h1><div><a href=\"{urldir+'..'}\">Parent Directory</a><br>{index_dir}</div></body></html>"}
+  except:
+    pass
 
 def extensionTraverse(dir="./", urldir="/", cache={}, config={}, extensions={}):
   if config["verbose"]:
@@ -63,10 +61,10 @@ def extensionTraverse(dir="./", urldir="/", cache={}, config={}, extensions={}):
     if os.path.isfile(dir+f):
       for extension in extensions.keys():
         try:
-          extensions[extension].srccompile(dir+f, urldir+f, cache, readfile)
+          extensions[extension].srccompile_file(dir+f, urldir+f, cache, readfile, config)
         except AttributeError:
           pass
-        except Extension as e:
+        except Exception as e:
           print(f"[Error] Error in extension {extension} in srccompile (file: {dir+f}, url: {urldir+f}) phase: '{str(e)}'")
     else:
       extensionTraverse(dir+f+"/", urldir+f+"/", cache, config, extensions)
@@ -84,7 +82,7 @@ def build(indexDirectories=False, config={}, cache={}, extensions={}):
 
   # ./nojs/
   if os.path.exists("nojs_files"):
-    directoryTraverse("nojs_files/modules/", "/nojs/modules/", False, cache, config)
+    directoryTraverse("nojs_files/", "/nojs/", config["indexNoJS"], cache, config)
 
   # ./index.html
   if os.path.exists("index.html") and os.path.isfile("index.html"):

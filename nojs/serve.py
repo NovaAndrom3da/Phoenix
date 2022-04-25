@@ -14,6 +14,7 @@ config = { # Set default config settings
   "host": False,
   "canrebuild": False,
   "indexDirectories": False,
+  "indexNoJS": False,
   "verbose": False,
   "zlib": True,
   "gzip": True,
