@@ -11,12 +11,16 @@ def readfile(dir, config):
   f.close()
   mime = str(mimetypes.guess_type(dir)[0])
   if config["minify"]:
-    if mime == "text/html":
-      data = html_minify(data)
-    elif mime == "text/css":
-      data = css_minify(data)
-    elif mime == "text/js":
-      data = js_minify(data)
+    try:
+      if mime == "text/html":
+        data = html_minify(data)
+      elif mime == "text/css":
+        data = css_minify(data)
+      elif mime == "text/js":
+        data = js_minify(data)
+  except Exception as e:
+    print(f"[Error] {str(e)}")
+
   return {
     "mime": mime,
     "cont": data
