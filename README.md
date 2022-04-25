@@ -45,5 +45,11 @@ NoJS can be configured per-project with a `nojs.config.json` file. Here are the 
 > `purgecache` (`bool`, `true`) - Clear the excess cache.
 >
 > `minify` (`bool`, `true`) - Make HTML, CSS, and JS files smaller.
+>
+> `proxy` (`dict`, `{}`) - Reverse-proxy websites.
+>
+> `fixProxy` (`bool`, `true`) - Replace all instances of the proxied URL with the requested URL.
+>
+> `thisURL` (`str`) - A nice name for the website hosted by the server. Used for `fixProxy`.
 > 
 > `canrebuild` - WIP

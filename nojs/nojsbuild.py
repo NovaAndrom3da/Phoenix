@@ -34,7 +34,6 @@ def directoryTraverse(dir="./", urldir="/", indexDirectories=False, cache={}, co
       cache[urldir+f] = readfile(dir+f, config)
       if indexDirectories:
         index_dir += f"<a href='{urldir+f}'>File: {f}</a><br>"
-        print("heehoo "+urldir+f)
         if config["verbose"]:
           print(f"[Build] indexed file {dir+f} ({urldir+f})")
     else:
@@ -42,14 +41,11 @@ def directoryTraverse(dir="./", urldir="/", indexDirectories=False, cache={}, co
       if os.path.exists(dir+f+"/index.html") and os.path.isfile(dir+f+"/index.html"):
         cache[urldir+f+'/'] = readfile(dir+f+"/index.html", config)
       elif indexDirectories:
-        print('heehoo '+urldir+f)
         index_dir += f"<a href='{urldir+f}'>Dir: {f}</a><br>"
         if config["verbose"]:
           print("[Build] indexed subdir "+dir+f+" ("+urldir+f+")")
-  try:
+  if indexDirectories:
     cache[urldir] = {"mime": "text/html", "cont": f"<!DOCTYPE html><html><body><h1>Index of {urldir}</h1><div><a href=\"{urldir+'..'}\">Parent Directory</a><br>{index_dir}</div></body></html>"}
-  except:
-    pass
 
 def extensionTraverse(dir="./", urldir="/", cache={}, config={}, extensions={}):
   if config["verbose"]:

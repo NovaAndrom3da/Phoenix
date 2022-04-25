@@ -3,10 +3,12 @@
   "port": 80,
   "canrebuild": true,
   "indexDirectories": true,
+  "indexNoJS": true,
   "verbose_": true,
   "proxy": {
-    "/test": "http://localhost:80"
+    "/": "http://youtube.com"
   },
   "gzip": false,
-  "zlib": false
+  "zlib": false,
+  "thisURL": "nojs.froggo8311.repl.co"
 }

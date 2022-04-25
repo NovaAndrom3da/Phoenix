@@ -5,7 +5,7 @@ import nopm
 # Get required assets
 from flask import Flask, Response, session, request
 from waitress import serve as WSGI_SERVER
-import click, random, os, json, gzip, urllib.request, zlib, sys, time, math
+import click, random, os, json, gzip, urllib, zlib, sys, time, math
 
 
 # Configuration
@@ -22,7 +22,9 @@ config = { # Set default config settings
   "nocompress": [],
   "purgecache": True,
   "minify": True,
-  "proxy": {}
+  "proxy": {},
+  "fixProxy": True,
+  "thisURL": None
 }
 
 if os.path.exists("nojs.config.json") and os.path.isfile("nojs.config.json"):
@@ -108,10 +110,44 @@ def assign(app, url="/", cache={}, view_funcs=[]):
 
 def assign_proxy(app, url="/", proxy="localhost:3000", cache={}, view_funcs=[]):
   def server_proxy_index():
-    return urllib.request.urlopen(proxy).read()
+    try:
+      if request.method == "GET":
+        cont = urllib.request.urlopen(proxy).read()
+        if type(cont) == str and config["thisURL"] != None and config["fixProxy"]:
+          cont = cont.replace(proxy, config["thisURL"]+url)
+        return cont
+      elif request.method == "POST":
+        cont = urllib.request.urlopen(urllib.request.Request(proxy, urllib.parse.urlencode(request.form).encode()))
+        if type(cont) == str and config["thisURL"] != None and config["fixProxy"]:
+          cont = cont.replace(proxy, config["thisURL"]+url)
+        return cont
+      else:
+        return "[Proxy] Invalid method supplied"
+    except Exception as e:
+      err = f"[Proxy] [Error] {str(e)}"
+      if config["verbose"]:
+        print(err)
+      return err
   
   def server_proxy_subpath(suburl):
-    return urllib.request.urlopen(f"{proxy}/{suburl}").read()
+    try:
+      if request.method == "GET":
+        cont = urllib.request.urlopen(f"{proxy}/{suburl}").read()
+        if type(cont) == str and config["thisURL"] != None and config["fixProxy"]:
+          cont = cont.replace(proxy, config["thisURL"]+url)
+        return cont
+      elif request.method == "POST":
+        cont = urllib.request.urlopen(urllib.request.Request(f"{proxy}/{suburl}", urllib.parse.urlencode(request.form).encode()))
+        if type(cont) == str and config["thisURL"] != None and config["fixProxy"]:
+          cont = cont.replace(proxy, config["thisURL"]+url)
+        return cont
+      else:
+        return "[Proxy] Invalid method supplied"
+    except Exception as e:
+      err = f"[Proxy] [Error] {str(e)}"
+      if config["verbose"]:
+        print(err)
+      return err
 
   name_index = f"server_route_func_proxy_index_{url.replace('/', '_').replace('.', '_')}_{random.randint(0, 10000000)}"
   server_proxy_index.__name__ = name_index
@@ -121,8 +157,8 @@ def assign_proxy(app, url="/", proxy="localhost:3000", cache={}, view_funcs=[]):
   server_proxy_subpath.__name__ = name_subpath
   server_proxy_subpath.__qualname__ = name_subpath
 
-  view_funcs.append(app.route(url)(server_proxy_index))
-  view_funcs.append(app.route(f"{url}/<path:suburl>")(server_proxy_subpath))
+  view_funcs.append(app.route(url, methods=["POST", "GET"])(server_proxy_index))
+  view_funcs.append(app.route(f"{url}/<path:suburl>", methods=["POST", "GET"])(server_proxy_subpath))
 
 def run(host=config["host"], port=config["port"], indexDirectories=config["indexDirectories"], rebuild=config["canrebuild"]):
   print("[Init] Building server...")
@@ -166,7 +202,7 @@ def run(host=config["host"], port=config["port"], indexDirectories=config["index
     print("[Clean] Done clearing cache")
   
   print(f"[Init] Done. Starting server on port {port}...")
-  print(f"[Info] Finished in {time.time()-build_time_start} ms")
+  print(f"[Info] Finished in {(time.time()-build_time_start) * 1000} ms")
   try:
     app.run(host, port)
   except KeyboardInterrupt:
