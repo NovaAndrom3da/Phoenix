@@ -4,7 +4,7 @@ NoJS is a speedy lightweight web server with support for modules and extensions.
 ## 📦 Installation 📦
 You can quickly and easily install from PyPi by running:
 ```bash
-  pip install nopm
+pip install nopm
 ```
 
 This provides you with the NoJS server and NoPM package manager.
