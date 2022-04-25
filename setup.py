@@ -13,7 +13,7 @@ setup(
   url="https://github.com/Froggo8311/NoJS",
   author="Froggo",
   author_email="",
-  license="BASED",
+  license="BASED-CS-LD",
   classifiers=[
     "Programming Language :: Python :: 3"
   ],
