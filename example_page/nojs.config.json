@@ -1,8 +1,12 @@
 {
-  "host": false,
-  "port": 8080,
+  "host": true,
+  "port": 80,
   "canrebuild": true,
   "indexDirectories": true,
-  "verbose": true,
-  "url_stop": true
+  "verbose_": true,
+  "proxy": {
+    "/test": "http://localhost:80"
+  },
+  "gzip": false,
+  "zlib": false
 }

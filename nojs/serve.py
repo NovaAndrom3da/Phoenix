@@ -5,12 +5,11 @@ import nopm
 # Get required assets
 from flask import Flask, Response, session, request
 from waitress import serve as WSGI_SERVER
-import click, random, os, json, gzip, urllib.request, zlib, sys
+import click, random, os, json, gzip, urllib.request, zlib, sys, time, math
 
 
 # Configuration
 config = { # Set default config settings
-  "proxy": [],
   "port": 8080,
   "host": False,
   "canrebuild": False,
@@ -122,10 +121,11 @@ def assign_proxy(app, url="/", proxy="localhost:3000", cache={}, view_funcs=[]):
   server_proxy_subpath.__qualname__ = name_subpath
 
   view_funcs.append(app.route(url)(server_proxy_index))
-  view_funcs.append(app.route("<path:url>")(server_proxy_subpath))
+  view_funcs.append(app.route(f"{url}/<path:suburl>")(server_proxy_subpath))
 
 def run(host=config["host"], port=config["port"], indexDirectories=config["indexDirectories"], rebuild=config["canrebuild"]):
   print("[Init] Building server...")
+  build_time_start = time.time()
   loadextensions()
   cache = build.build(indexDirectories, config, extensions=extensions)
   
@@ -165,12 +165,13 @@ def run(host=config["host"], port=config["port"], indexDirectories=config["index
     print("[Clean] Done clearing cache")
   
   print(f"[Init] Done. Starting server on port {port}...")
+  print(f"[Info] Finished in {time.time()-build_time_start} ms")
   try:
     app.run(host, port)
   except KeyboardInterrupt:
     print("[Stop] Terminated by user")
   except Exception as kill_err:
-    print(f"[Stop] {e}")
+    print(f"[Stop] {kill_err}")
 
 
 if __name__ == "__main__":
