@@ -39,7 +39,7 @@ def directoryTraverse(dir="./", urldir="/", indexDirectories=False, cache={}, co
     else:
       directoryTraverse(dir+f+"/", urldir+f+"/", indexDirectories, cache, config)
       if os.path.exists(dir+f+"/index.html") and os.path.isfile(dir+f+"/index.html"):
-        cont = readfile(dir+f+"/index.html")
+        cont = readfile(dir+f+"/index.html", config)
       elif indexDirectories:
         index_dir += f"<a href='{urldir+f}'>Dir: {f}</a><br>"
         if config["verbose"]:
