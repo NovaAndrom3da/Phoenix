@@ -18,8 +18,8 @@ def readfile(dir, config):
         data = css_minify(data)
       elif mime == "text/js":
         data = js_minify(data)
-  except Exception as e:
-    print(f"[Error] {str(e)}")
+    except Exception as e:
+      print(f"[Error] {str(e)}")
 
   return {
     "mime": mime,
