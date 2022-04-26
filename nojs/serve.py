@@ -78,7 +78,7 @@ def assign(app, url="/", cache={}, view_funcs=[]):
       if config["verbose"]:
         print(f"[Prehost] Compressing {url} (mode: gzip)...")
       if type(cont) == str:
-        cont = cont.encode(config["enoding"])
+        cont = cont.encode(config["encoding"])
       cont = gzip.compress(cont)
   else:
     if config["verbose"]:
