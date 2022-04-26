@@ -101,8 +101,6 @@ def build(indexDirectories=False, config={}, cache={}, extensions={}):
   for extension in extensions.keys():
     try:
       extensions[extension].postbuild(cache)
-    except AttributeError:
-      pass
     except Exception as e:
       print(f"[Error] Error in extension {extension} in postbuild phase: '{str(e)}'")
 

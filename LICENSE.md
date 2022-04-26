@@ -1,6 +1,6 @@
                    The Based License v1.4.1
 
-Used by <software author(s)> on <date DD MM YYYY>.
+Used by <strong>Froggo8311</strong> on <strong>25 04 2022</strong>.
 Written by Kainoa Kanter (ThatOneCalculator) on 1 March, 2022. Last updated on 2 April, 2022. 
 
 ---

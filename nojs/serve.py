@@ -201,8 +201,6 @@ def run(host=config["host"], port=config["port"], indexDirectories=config["index
   for ext in extensions:
     try:
       ext.run(app, config, cache)
-    except AttributeError:
-      pass
     except Exception as e:
       print(f"[Extension] [Error] {str(e)}")
   
