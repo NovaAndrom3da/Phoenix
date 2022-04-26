@@ -24,7 +24,8 @@ config = { # Set default config settings
   "minify": True,
   "proxy": {},
   "fixProxy": True,
-  "thisURL": None
+  "thisURL": None,
+  "cache-max-age": 31536000
 }
 
 if os.path.exists("nojs.config.json") and os.path.isfile("nojs.config.json"):
@@ -85,6 +86,7 @@ def assign(app, url="/", cache={}, view_funcs=[]):
   
   ret = Response(cont, status=200, mimetype=cache[url]["mime"])
   ret.headers["Content-Length"] = len(cont)
+  ret.headers["Cache-Control"] = config["cache-max-age"]
 
   if not url in config["nocompress"]:
     if config["zlib"] and config["gzip"]:
