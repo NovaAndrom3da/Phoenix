@@ -198,6 +198,14 @@ def run(host=config["host"], port=config["port"], indexDirectories=config["index
   for proxy_route in config["proxy"].keys():
     assign_proxy(app, proxy_route, config["proxy"][proxy_route], cache, view_funcs)
 
+  for ext in extensions:
+    try:
+      ext.run(app, config, cache)
+    except AttributeError:
+      pass
+    except Exception as e:
+      print(f"[Extension] [Error] {str(e)}")
+  
   if config["purgecache"]:
     print("[Clean] Clearing cache")
     del(cache)
