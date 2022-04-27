@@ -10,3 +10,6 @@ def postbuild(cache={}): # postbuild step. happens after directory traversal
   for i in cache.keys():
     pass #print(i)
 
+def run(app, config={}, cache={}):
+  print("extension run is working")
+  return

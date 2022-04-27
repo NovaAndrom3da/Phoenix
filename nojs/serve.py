@@ -200,9 +200,9 @@ def run(host=config["host"], port=config["port"], indexDirectories=config["index
 
   for ext in extensions:
     try:
-      ext.run(app, config, cache)
+      extensions[ext].run(app, config, cache)
     except Exception as e:
-      print(f"[Extension] [Error] {str(e)}")
+      print(f"[Error] Issue running extension {ext} in run phase: {str(e)}")
   
   if config["purgecache"]:
     print("[Clean] Clearing cache")

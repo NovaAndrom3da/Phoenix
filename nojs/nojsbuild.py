@@ -98,10 +98,10 @@ def build(indexDirectories=False, config={}, cache={}, extensions={}):
       "cont": "<!DOCTYPE html>\n<html><head></head><body></body></html>"
     }
 
-  for extension in extensions.keys():
+  for ext in extensions.keys():
     try:
-      extensions[extension].postbuild(cache)
+      extensions[ext].postbuild(cache)
     except Exception as e:
-      print(f"[Error] Error in extension {extension} in postbuild phase: '{str(e)}'")
+      print(f"[Error] Error in extension {ext} in postbuild phase: '{str(e)}'")
 
   return cache
