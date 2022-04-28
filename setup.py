@@ -13,7 +13,7 @@ setup(
   url="https://github.com/Froggo8311/NoJS",
   author="Froggo",
   author_email="",
-  license="BASED-CS-LD",
+  license="MIT",
   classifiers=[
     "Programming Language :: Python :: 3"
   ],
@@ -34,7 +34,7 @@ setup(
       "nojs=nojs.__main__:main"
     ]
   },
-  license_files = ("LICENSE.md",),
+  license_files = ("LICENSE",),
   keywords=[
     "NoJS",
     "NoPM",
