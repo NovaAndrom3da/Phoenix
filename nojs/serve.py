@@ -85,19 +85,21 @@ def assign(app, url="/", cache={}, view_funcs=[]):
       print(f"[Prehost] Skipping compression for {url}")
   
   ret = Response(cont, status=200, mimetype=cache[url]["mime"])
-  ret.headers["Content-Length"] = len(cont)
-  ret.headers["Cache-Control"] = config["cache-max-age"]
+  ret.headers["Cache-Control"] = f"max-age={config["cache-max-age"]}"
 
   if not url in config["nocompress"]:
     if config["zlib"] and config["gzip"]:
+      ret.headers["Content-Length"] = len(cont)
       ret.headers["Content-Encoding"] = 'deflate, gzip'
       if config["verbose"]:
         print(f"[Prehost] Done compressing {url} (mode: zlib, gzip)")
     elif config["zlib"]:
+      ret.headers["Content-Length"] = len(cont)
       ret.headers["Content-Encoding"] = 'deflate'
       if config["verbose"]:
         print(f"[Prehost] Done compressing {url} (mode: zlib)")
     elif config["gzip"]:
+      ret.headers["Content-Length"] = len(cont)
       ret.headers["Content-Encoding"] = 'gzip'
       if config["verbose"]:
         print(f"[Prehost] Done comrpessing {url} (mode: gzip)")
