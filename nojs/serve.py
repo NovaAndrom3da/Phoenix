@@ -97,7 +97,7 @@ def assign(app, url="/", cache={}, view_funcs=[]):
       print(f"[Prehost] Skipping compression for {url}")
   
   ret = Response(cont, status=200, mimetype=cache[url]["mime"])
-  ret.headers["Cache-Control"] = f"max-age={config["cache-max-age"]}"
+  ret.headers["Cache-Control"] = f"max-age={config['cache-max-age']}"
 
   if not url in config["nocompress"]:
     if config["zlib"] and config["gzip"]:
