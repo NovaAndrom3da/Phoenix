@@ -25,7 +25,8 @@ config = { # Set default config settings
   "proxy": {},
   "fixProxy": True,
   "thisURL": None,
-  "cache-max-age": 31536000
+  "cache-max-age": 31536000,
+  "threads": 4
 }
 
 if os.path.exists("nojs.config.json") and os.path.isfile("nojs.config.json"):
@@ -35,11 +36,22 @@ if os.path.exists("nojs.config.json") and os.path.isfile("nojs.config.json"):
   for i in configcont.keys():
     config[i] = configcont[i]
 
+max_cpu_threads = len(os.sched_getaffinity(0))
+if config['verbose'] and config['threads'] < max_cpu_threads:
+  print(f"[Info] The server is running on {config['threads']} thread(s), while there are {max_cpu_threads} available.")
 
+if config['threads'] > max_cpu_threads:
+  print(f"[Error] The server was configured to run on {config['threads']}, when there are only {max_cpu_threads} available. Switching to maximum.")
+  config['threads'] = max_cpu_threads
+
+if config['threads'] <= 0:
+  print(f"[Error] The specified number of threads, {config['threads']}, is less than zero. Setting threads to 1")
+  config['threads'] = 1
+  
 # Initate run function
 class NoJSServer(Flask):
-  def run(self, host=False, port=8080):
-    return WSGI_SERVER(self, host=['localhost', '0.0.0.0'][host], port=port, ident="NoJS")
+  def run(self, host=False, port=8080, threads=4):
+    return WSGI_SERVER(self, host=['localhost', '0.0.0.0'][host], port=port, ident="NoJS", threads=threads)
 
 
 # Extensions
@@ -214,7 +226,7 @@ def run(host=config["host"], port=config["port"], indexDirectories=config["index
   print(f"[Init] Done. Starting server on port {port}...")
   print(f"[Info] Finished in {(time.time()-build_time_start) * 1000} ms")
   try:
-    app.run(host, port)
+    app.run(host, port, config['threads'])
   except KeyboardInterrupt:
     print("[Stop] Terminated by user")
   except Exception as kill_err:
