@@ -24,7 +24,7 @@ nojs.run()
 ## ⚙ Configuration ⚙
 NoJS can be configured per-project with a `nojs.config.json` file. Here are the options:
 
-> `host` (`bool`, `false`) - Allow the server to be accessible to be accessible from other devices.
+> `host` (`bool`, `false`) - Allow the server to be publicly accessible from other devices.
 > 
 > `port` (`int`, `8080`) - Specify the port to run the server on.
 >
