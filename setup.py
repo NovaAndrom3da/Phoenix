@@ -19,14 +19,12 @@ setup(
   ],
   packages=[
     "nojs",
-    "nopm",
     "css_html_js_minify"
   ],
   include_package_data=True,
   install_requires=[
     "flask",
-    "waitress",
-    "click"
+    "waitress"
   ],
   entry_points={
     "console_scripts": [
