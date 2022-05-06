@@ -6,7 +6,7 @@ README = (HERE / "README.md").read_text()
 
 setup(
   name="nopm",
-  version="1.0.0",
+  version="1.0.0.1",
   description="An alternative web server and package manager",
   long_description=README,
   long_description_content_type="text/markdown",
@@ -19,6 +19,7 @@ setup(
   ],
   packages=[
     "nojs",
+    "nojs.nopm"
     "css_html_js_minify"
   ],
   include_package_data=True,
