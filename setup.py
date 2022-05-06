@@ -6,7 +6,7 @@ README = (HERE / "README.md").read_text()
 
 setup(
   name="nopm",
-  version="0.3.5.5",
+  version="1.0.0",
   description="An alternative web server and package manager",
   long_description=README,
   long_description_content_type="text/markdown",
@@ -30,7 +30,6 @@ setup(
   ],
   entry_points={
     "console_scripts": [
-      "nopm=nopm.__main__:main",
       "nojs=nojs.__main__:main"
     ]
   },

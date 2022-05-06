@@ -1,5 +1,6 @@
 from . import __init__ as nojs
-import sys
+import sys, click
 
 def main():
   nojs.run()
+

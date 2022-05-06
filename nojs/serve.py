@@ -1,6 +1,6 @@
 # Get NoJS files
 from . import nojsbuild as build
-import nopm
+from .nopm import NoPM
 
 # Get required assets
 from flask import Flask, Response, session, request
@@ -41,7 +41,7 @@ if config['verbose'] and config['threads'] < max_cpu_threads:
   print(f"[Info] The server is running on {config['threads']} thread(s), while there are {max_cpu_threads} available.")
 
 if config['threads'] > max_cpu_threads:
-  print(f"[Error] The server was configured to run on {config['threads']}, when there are only {max_cpu_threads} available. Switching to maximum.")
+  print(f"[Error] The server was configured to run on {config['threads']} thread(s), when there are only {max_cpu_threads} available. Switching to maximum.")
   config['threads'] = max_cpu_threads
 
 if config['threads'] <= 0:
@@ -58,7 +58,7 @@ class NoJSServer(Flask):
 extensions = {}
 
 def loadextensions():
-  nopm.init()
+  NoPM.init()
   ext_list = os.listdir("nojs_files/extensions")
   for ext in ext_list:
     exec(f"import nojs_files.extensions.{ext} as func_ext_{ext}")
