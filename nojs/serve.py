@@ -1,6 +1,7 @@
 # Get NoJS files
 from . import nojsbuild as build
-from .nopm import NoPM
+from . import nopm
+NoPM = nopm.NoPM
 
 # Get required assets
 from flask import Flask, Response, session, request
