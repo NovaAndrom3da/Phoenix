@@ -4,7 +4,7 @@ Pheonix is a speedy lightweight web server with support for modules and extensio
 ## 📦 Installation 📦
 You can quickly and easily install from PyPi by running:
 ```bash
-pip install nopm
+pip install pheonix
 ```
 
 This provides you with the Pheonix server and PPM package manager.
