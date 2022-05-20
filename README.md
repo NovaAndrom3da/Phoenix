@@ -1,5 +1,5 @@
-# ⚡ NoJS ⚡
-NoJS is a speedy lightweight web server with support for modules and extensions.
+# ⚡ Pheonix ⚡
+Pheonix is a speedy lightweight web server with support for modules and extensions.
 
 ## 📦 Installation 📦
 You can quickly and easily install from PyPi by running:
@@ -7,22 +7,31 @@ You can quickly and easily install from PyPi by running:
 pip install nopm
 ```
 
-This provides you with the NoJS server and NoPM package manager.
+This provides you with the Pheonix server and PPM package manager.
 
 ## 😀 How it works 😀
-NoJS quickly reads all of the files used by the server and caches them. This reduces the amount of disk read-write operations. It then delivers the files using gzip and zlib to reduce packet size.
+Pheonix quickly reads all of the files used by the server and caches them. This reduces the amount of disk read-write operations. It then delivers the files using gzip and zlib to reduce packet size.
 
-NoJS uses a very small amount of RAM, making it perfect for production environments.
+Pheonix uses a very small amount of RAM, making it perfect for production environments.
 
 ## 🏁 Getting Started 🏁
-As of 04/25/2022, NoJS and NoPM does not yet support commandline operations. You can still start the server in Python:
-```py
-import nojs
-nojs.run()
+You can quickly run Pheonix with:
+```bash
+pheonix run
 ```
 
 ## ⚙ Configuration ⚙
-NoJS can be configured per-project with a `nojs.config.json` file. Here are the options:
+### Command Line Configuration
+#### `run`
+> `--host` `-h` - Allow the server to be publicly accessible from other devices.
+>
+> `--port <port>` `-p <port>` - Specify the port to run the server on.
+
+#### `install <package>`
+> 
+
+### Project File Configuration
+Pheonix can be configured per-project with a `pheonix.config.json` file. Here are the options:
 
 > `host` (`bool`, `false`) - Allow the server to be publicly accessible from other devices.
 > 
@@ -36,7 +45,7 @@ NoJS can be configured per-project with a `nojs.config.json` file. Here are the 
 >
 > `indexDirectories` (`bool`, `false`) - Display the directory's contents if no file is specified.
 >
-> `indexNoJS` (`bool`, `false`) - Index the `/nojs/` directory.
+> `indexPheonix` (`bool`, `false`) - Index the `/pheonix/` directory.
 >
 > `encoding` (`str`, `utf-8`) - Set the text encoding.
 >

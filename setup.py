@@ -1,25 +1,28 @@
 import pathlib
 from setuptools import setup
+from pheonix import VERSION
+
+print(f"Packaging Pheonix version {VERSION}")
 
 HERE = pathlib.Path(__file__).parent
 README = (HERE / "README.md").read_text()
 
 setup(
-  name="nopm",
-  version="1.0.0.1",
+  name="pheonix",
+  version=VERSION,
   description="An alternative web server and package manager",
   long_description=README,
   long_description_content_type="text/markdown",
-  url="https://github.com/Froggo8311/NoJS",
+  url="https://github.com/Froggo8311/Pheonix",
   author="Froggo",
-  author_email="",
+  # author_email="",
   license="MIT",
   classifiers=[
     "Programming Language :: Python :: 3"
   ],
   packages=[
-    "nojs",
-    "nopm",
+    "pheonix",
+    "ppm",
     "css_html_js_minify"
   ],
   include_package_data=True,
@@ -29,13 +32,18 @@ setup(
   ],
   entry_points={
     "console_scripts": [
-      "nojs=nojs.__main__:main"
+      "pheonix=pheonix.__main__:main"
     ]
   },
-  license_files = ("LICENSE",),
+  license_files = ("LICENSE.md",),
   keywords=[
+    "Pheonix",
+    "PPM",
     "NoJS",
     "NoPM",
+    "Website",
+    "Web",
+    "Webserver",
     "Server",
     "Package Manager",
     "HTML",

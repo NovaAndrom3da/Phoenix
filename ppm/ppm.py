@@ -3,13 +3,13 @@ __URL__ = "https://nojs-repo.vercel.app"
 import os, urllib.request, tarfile, shutil, json
 
 def pkg_json_r():
-  pkg_json_fr = open("nojs.package.json", 'r')
+  pkg_json_fr = open("package.pheonix", 'r')
   pkg_json_rr = pkg_json_fr.read()
   pkg_json_fr.close()
   return json.loads(pkg_json_rr)
 
 def pkg_json_dictw(write_dict={}):
-  pkg_json_dw = open('nojs.package.json', 'w')
+  pkg_json_dw = open('package.pheonix', 'w')
   pkg_json_dw.write(json.dumps(write_dict))
   pkg_json_dw.close()
 
@@ -19,12 +19,12 @@ def pkg_json_w(key='', val=''):
   pkg_json_dictw(json.dumps(pkg_json_ww))
 
 def init():
-  pathgen = ["nojs_files", "nojs_files/modules", "nojs_files/extensions"]
+  pathgen = ["pheonix_files", "pheonix_files/modules", "pheonix_files/extensions"]
   for path in pathgen:  
     if not os.path.exists(path):
       os.mkdir(path)
 
-  if not os.path.exists("nojs.package.json"):
+  if not os.path.exists("package.pheonix"):
     pkg_json_dictw()
 
   filegen = []
@@ -36,7 +36,7 @@ def niceurl(string=""):
   return string.replace("/", "_").replace("-", "_")
 
 def install_module(pkg="", version="latest", repourl=__URL__):
-  if not os.path.exists(f"nojs_files/modules/{pkg}"):
+  if not os.path.exists(f"pheonix_files/modules/{pkg}"):
     version_out = version
     if version == "latest":
       version = urllib.request.urlopen(f'{repourl}/modules/{niceurl(pkg)}/latest.txt').read().decode()
@@ -44,7 +44,7 @@ def install_module(pkg="", version="latest", repourl=__URL__):
     status = response.getcode()
 
     tar = tarfile.open(pkg+".tar.xz", mode="r|xz", fileobj=response)
-    tar.extractall(f"nojs_files/modules/{niceurl(pkg)}_{version_out}")
+    tar.extractall(f"pheonix_files/modules/{niceurl(pkg)}_{version_out}")
     tar.close()
 
     pkg_json_w('mod:'+pkg, version)
@@ -53,7 +53,7 @@ def install_module(pkg="", version="latest", repourl=__URL__):
   print(f"[Okay] '{pkg}' is already installed")
   
 def install_extension(pkg="", version="latest", repourl=__URL__):
-  if not os.path.exists(f"nojs_files/extensions/{pkg}.js"):
+  if not os.path.exists(f"pheonix_files/extensions/{pkg}.js"):
     version_out = version
     if version == "latest":
       version = urllib.request.urlopen(f'{repourl}/extensions/{niceurl(pkg)}/latest.txt').read().decode()
@@ -61,7 +61,7 @@ def install_extension(pkg="", version="latest", repourl=__URL__):
     status = response.getcode()
 
     tar = tarfile.open(pkg+".tar.xz", mode="r|xz", fileobj=response)
-    tar.extractall(f"nojs_files/extensions/{niceurl(pkg)}_{version_out}")
+    tar.extractall(f"pheonix_files/extensions/{niceurl(pkg)}_{version_out}")
     tar.close()
 
     pkg_json_w('ext:'+pkg, version)
@@ -90,8 +90,8 @@ def install(pkg="", version="latest", type="*", repourl=__URL__): # version to b
     print(f"[Error] '{pkg}' install returned '{str(e)}'")
 
 def remove_module(pkg=""):
-  if os.path.exists(f"nojs_files/modules/{pkg}"):
-    shutil.rmtree(f"nojs_files/modules/{pkg}")
+  if os.path.exists(f"pheonix_files/modules/{pkg}"):
+    shutil.rmtree(f"pheonix_files/modules/{pkg}")
     print(f"[Okay] Module '{pkg}' removed sucessfully")
 
     pkg_config = pkg_json_r()
@@ -103,8 +103,8 @@ def remove_module(pkg=""):
     print(f"[Okay] Module '{pkg}' is not installed")
 
 def remove_extension(pkg=""):
-  if os.path.exists(f"nojs_files/extensions/{pkg}"):
-    shutil.rmtree(f"nojs_files/extensions/{pkg}")
+  if os.path.exists(f"pheonix_files/extensions/{pkg}"):
+    shutil.rmtree(f"pheonix_files/extensions/{pkg}")
     print(f"[Okay] Extension '{pkg}' removed sucessfully")
 
     pkg_config = pkg_json_r()

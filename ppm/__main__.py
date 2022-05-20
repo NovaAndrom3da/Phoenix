@@ -1,4 +1,4 @@
-from .nopm import ( install_module as i_mod,
+from .ppm import ( install_module as i_mod,
   install_extension as i_ext,
   install as i,
   remove_module as r_mod,

@@ -1,5 +1,5 @@
-class NoPM():
-  from .nopm import (
+class PPM():
+  from .ppm import (
     install_module as i_mod,
     install_extension as i_ext,
     install as i,

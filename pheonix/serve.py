@@ -1,6 +1,7 @@
-# Get NoJS files
-from . import nojsbuild as build
-from nopm import NoPM
+VERSION = "1.0.1.1"
+# Get Pheonix files
+from . import build
+from ppm import PPM
 
 # Get required assets
 from flask import Flask, Response, session, request
@@ -14,7 +15,7 @@ config = { # Set default config settings
   "host": False,
   "canrebuild": False,
   "indexDirectories": False,
-  "indexNoJS": False,
+  "indexPheonix": False,
   "verbose": False,
   "zlib": True,
   "gzip": True,
@@ -29,8 +30,8 @@ config = { # Set default config settings
   "threads": 4
 }
 
-if os.path.exists("nojs.config.json") and os.path.isfile("nojs.config.json"):
-  configfile = open("nojs.config.json")
+if os.path.exists("Pheonix.config.json") and os.path.isfile("Pheonix.config.json"):
+  configfile = open("Pheonix.config.json")
   configcont = json.loads(configfile.read())
   configfile.close()
   for i in configcont.keys():
@@ -49,19 +50,19 @@ if config['threads'] <= 0:
   config['threads'] = 1
   
 # Initate run function
-class NoJSServer(Flask):
+class PheonixServer(Flask):
   def run(self, host=False, port=8080, threads=4):
-    return WSGI_SERVER(self, host=['localhost', '0.0.0.0'][host], port=port, ident="NoJS", threads=threads)
+    return WSGI_SERVER(self, host=['localhost', '0.0.0.0'][host], port=port, ident="Pheonix", threads=threads)
 
 
 # Extensions
 extensions = {}
 
 def loadextensions():
-  NoPM.init()
-  ext_list = os.listdir("nojs_files/extensions")
+  PPM.init()
+  ext_list = os.listdir("pheonix_files/extensions")
   for ext in ext_list:
-    exec(f"import nojs_files.extensions.{ext} as func_ext_{ext}")
+    exec(f"import pheonix_files.extensions.{ext} as func_ext_{ext}")
     exec(f"extensions['{ext}'] = func_ext_{ext}")
 
 
@@ -183,11 +184,11 @@ def run(host=config["host"], port=config["port"], indexDirectories=config["index
   cache = build.build(indexDirectories, config, extensions=extensions)
   
   print("[Init] Done. Initializing server...")
-  app = NoJSServer(__name__)
+  app = PheonixServer(__name__)
   app.secret_key = os.urandom(16)
   if rebuild:
-    @app.route("/nojs/rebuild")
-    def nojs_rebuild(): # to be fixed
+    @app.route("/Pheonix/rebuild")
+    def Pheonix_rebuild(): # to be fixed
       if config["verbose"]:
         print("[Rebuild] Starting rebuild.")
       view_funcs = []
