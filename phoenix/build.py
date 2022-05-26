@@ -80,9 +80,9 @@ def build(indexDirectories=False, config={}, cache={}, extensions={}):
   if os.path.exists("src"):
     extensionTraverse("src/", "/src/", cache, config, extensions)
 
-  # ./pheonix/
-  if os.path.exists("pheonix_files"):
-    directoryTraverse("pheonix_files/", "/pheonix/", config["indexPheonix"], cache, config)
+  # ./phoenix/
+  if os.path.exists("phoenix_files"):
+    directoryTraverse("phoenix_files/", "/phoenix/", config["indexPhoenix"], cache, config)
 
   # ./index.html
   if os.path.exists("index.html") and os.path.isfile("index.html"):

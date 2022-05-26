@@ -1,23 +1,23 @@
-# ⚡ Pheonix ⚡
-Pheonix is a speedy lightweight web server with support for modules and extensions.
+# ⚡ Phoenix ⚡
+Phoenix is a speedy lightweight web server with support for modules and extensions.
 
 ## 📦 Installation 📦
 You can quickly and easily install from PyPi by running:
 ```bash
-pip install pheonix
+pip install phoenix-ws
 ```
 
-This provides you with the Pheonix server and PPM package manager.
+This provides you with the Phoenix server and PPM package manager.
 
 ## 😀 How it works 😀
-Pheonix quickly reads all of the files used by the server and caches them. This reduces the amount of disk read-write operations. It then delivers the files using gzip and zlib to reduce packet size.
+Phoenix quickly reads all of the files used by the server and caches them. This reduces the amount of disk read-write operations. It then delivers the files using gzip and zlib to reduce packet size.
 
-Pheonix uses a very small amount of RAM, making it perfect for production environments.
+Phoenix uses a very small amount of RAM, making it perfect for production environments.
 
 ## 🏁 Getting Started 🏁
-You can quickly run Pheonix with:
+You can quickly run Phoenix with:
 ```bash
-pheonix run
+phoenix run
 ```
 
 ## ⚙ Configuration ⚙
@@ -31,7 +31,7 @@ pheonix run
 > 
 
 ### Project File Configuration
-Pheonix can be configured per-project with a `pheonix.config.json` file. Here are the options:
+Phoenix can be configured per-project with a `phoenix.config.json` file. Here are the options:
 
 > `host` (`bool`, `false`) - Allow the server to be publicly accessible from other devices.
 > 
@@ -45,7 +45,7 @@ Pheonix can be configured per-project with a `pheonix.config.json` file. Here ar
 >
 > `indexDirectories` (`bool`, `false`) - Display the directory's contents if no file is specified.
 >
-> `indexPheonix` (`bool`, `false`) - Index the `/pheonix/` directory.
+> `indexPhoenix` (`bool`, `false`) - Index the `/phoenix/` directory.
 >
 > `encoding` (`str`, `utf-8`) - Set the text encoding.
 >

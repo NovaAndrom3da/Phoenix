@@ -10,8 +10,8 @@ if '-p' in sys.argv:
 if '--port' in sys.argv:
   config['port'] = int(sys.argv[sys.argv.index('--port')+1])
 
-def pheonix_help():
-  print(F"pheonix version {VERSION} help\n\
+def phoenix_help():
+  print(F"phoenix version {VERSION} help\n\
         help       | Prints this message\n\
         -\n\
         run        | Starts the server\n\
@@ -25,16 +25,16 @@ def pheonix_help():
         ")
 
 if 'help' in sys.argv:
-  pheonix_help()
+  phoenix_help()
 
 if '--help' in sys.argv:
-  pheonix_help()
+  phoenix_help()
 
 if '-?' in sys.argv:
-  pheonix_help()
+  phoenix_help()
 
 if '/?' in sys.argv:
-  pheonix_help()
+  phoenix_help()
 
 if '-h' in sys.argv:
   config['host'] = True
@@ -48,7 +48,7 @@ if 'run' in sys.argv:
 if 'test-ext' in sys.argv:
   loadextensions()
 
-repo = "https://pheonix-repo.vercel.app"
+repo = "https://phoenix-repo.vercel.app"
 if '--repo' in sys.argv:
   repo = sys.argv[sys.argv.index('--repo')+1]
 
@@ -74,15 +74,15 @@ if 'remove' in sys.argv:
     PPM.r(pkg)
 
 if 'CLEAN' in sys.argv:
-  print("This WILL remove ALL PPM files (pheonix_files/ and pheonix.package.json)!")
+  print("This WILL remove ALL PPM files (phoenix_files/ and phoenix.package.json)!")
   confirm = input("Are you SURE you want to proceed? (Y/n)").lower()
   if confirm == 'y':
     try:
-      shutil.rmtree('pheonix_files/')
+      shutil.rmtree('phoenix_files/')
     except Exception as e:
       print(str(e))
     try:
-      os.remove('package.pheonix')
+      os.remove('package.phoenix')
     except Exception as e:
       print(str(e))
   else:

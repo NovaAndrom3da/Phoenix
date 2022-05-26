@@ -1,11 +1,11 @@
 VERSION = "1.0.4"
-# Get Pheonix files
+# Get Phoenix files
 from . import build
 from ppm import PPM
 
 # Get required assets
 from flask import Flask, Response, session, request
-from pheonix_waitress import serve as WSGI_SERVER
+from phoenix_waitress import serve as WSGI_SERVER
 import click, random, os, json, gzip, urllib, zlib, sys, time, math
 
 class Fore():
@@ -24,7 +24,7 @@ config = { # Set default config settings
   "host": False,
   "canrebuild": False,
   "indexDirectories": False,
-  "indexPheonix": False,
+  "indexPhoenix": False,
   "verbose": False,
   "zlib": True,
   "gzip": True,
@@ -39,8 +39,8 @@ config = { # Set default config settings
   "threads": 4
 }
 
-if os.path.exists("Pheonix.config.json") and os.path.isfile("Pheonix.config.json"):
-  configfile = open("Pheonix.config.json")
+if os.path.exists("Phoenix.config.json") and os.path.isfile("Phoenix.config.json"):
+  configfile = open("Phoenix.config.json")
   configcont = json.loads(configfile.read())
   configfile.close()
   for i in configcont.keys():
@@ -59,9 +59,9 @@ if config['threads'] <= 0:
   config['threads'] = 1
   
 # Initate run function
-class PheonixServer(Flask):
+class PhoenixServer(Flask):
   def run(self, host=False, port=8080, threads=4):
-    return WSGI_SERVER(self, host=['localhost', '0.0.0.0'][host], port=port, ident="Pheonix", threads=threads)
+    return WSGI_SERVER(self, host=['localhost', '0.0.0.0'][host], port=port, ident="Phoenix", threads=threads)
 
 
 # Extensions
@@ -69,9 +69,9 @@ extensions = {}
 
 def loadextensions():
   PPM.init()
-  ext_list = os.listdir("pheonix_files/extensions")
+  ext_list = os.listdir("phoenix_files/extensions")
   for ext in ext_list:
-    exec(f"import pheonix_files.extensions.{ext} as func_ext_{ext}")
+    exec(f"import phoenix_files.extensions.{ext} as func_ext_{ext}")
     exec(f"extensions['{ext}'] = func_ext_{ext}")
 
 
@@ -198,11 +198,11 @@ def run(config=config):
   cache = build.build(indexDirectories, config, extensions=extensions)
   
   print(f"[{Fore.lightblue} Init {Fore.reset}] Done. Initializing server...")
-  app = PheonixServer(__name__)
+  app = PhoenixServer(__name__)
   app.secret_key = os.urandom(16)
   if rebuild:
-    @app.route("/Pheonix/rebuild")
-    def Pheonix_rebuild(): # to be fixed
+    @app.route("/Phoenix/rebuild")
+    def Phoenix_rebuild(): # to be fixed
       if config["verbose"]:
         print(f"[{Fore.lightblue} Rebuild {Fore.reset}] Starting rebuild.")
       view_funcs = []
