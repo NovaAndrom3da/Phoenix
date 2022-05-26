@@ -1,11 +1,14 @@
 from .serve import run, PPM, config, loadextensions, VERSION
 import sys, os, shutil
 
+def main():
+  pass
+
 if '-p' in sys.argv:
-  config['port'] = sys.argv[sys.argv.index('-p')+1]
+  config['port'] = int(sys.argv[sys.argv.index('-p')+1])
 
 if '--port' in sys.argv:
-  config['port'] = sys.argv[sys.argv.index('--port')+1]
+  config['port'] = int(sys.argv[sys.argv.index('--port')+1])
 
 def pheonix_help():
   print(F"pheonix version {VERSION} help\n\
@@ -40,7 +43,10 @@ if '--host' in sys.argv:
   config['host'] = True
 
 if 'run' in sys.argv:
-  run()
+  run(config)
+
+if 'test-ext' in sys.argv:
+  loadextensions()
 
 repo = "https://pheonix-repo.vercel.app"
 if '--repo' in sys.argv:
@@ -71,8 +77,14 @@ if 'CLEAN' in sys.argv:
   print("This WILL remove ALL PPM files (pheonix_files/ and pheonix.package.json)!")
   confirm = input("Are you SURE you want to proceed? (Y/n)").lower()
   if confirm == 'y':
-    shutil.rmtree('pheonix_files/')
-    os.remove('pheonix.package.json')
+    try:
+      shutil.rmtree('pheonix_files/')
+    except Exception as e:
+      print(str(e))
+    try:
+      os.remove('package.pheonix')
+    except Exception as e:
+      print(str(e))
   else:
     print("Operation cancelled.")
-  
+

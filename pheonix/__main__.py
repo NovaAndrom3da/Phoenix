@@ -1,6 +1,6 @@
-from . import __init__ as nojs
-import sys, click
+import pheonix
+import sys
 
 def main():
-  nojs.run()
+  pheonix.run()
 

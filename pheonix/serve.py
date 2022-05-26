@@ -1,11 +1,11 @@
-VERSION = "1.0.1.2"
+VERSION = "1.0.3.1"
 # Get Pheonix files
 from . import build
 from ppm import PPM
 
 # Get required assets
 from flask import Flask, Response, session, request
-from waitress import serve as WSGI_SERVER
+from pheonix_waitress import serve as WSGI_SERVER
 import click, random, os, json, gzip, urllib, zlib, sys, time, math
 
 
@@ -177,7 +177,12 @@ def assign_proxy(app, url="/", proxy="localhost:3000", cache={}, view_funcs=[]):
   view_funcs.append(app.route(url, methods=["POST", "GET"])(server_proxy_index))
   view_funcs.append(app.route(f"{url}/<path:suburl>", methods=["POST", "GET"])(server_proxy_subpath))
 
-def run(host=config["host"], port=config["port"], indexDirectories=config["indexDirectories"], rebuild=config["canrebuild"]):
+def run(config=config):
+  host = config['host']
+  port = config['port']
+  indexDirectories=config['indexDirectories']
+  rebuild=config['canrebuild']
+  
   print("[Init] Building server...")
   build_time_start = time.time()
   loadextensions()
@@ -234,5 +239,5 @@ def run(host=config["host"], port=config["port"], indexDirectories=config["index
     print(f"[Stop] {kill_err}")
 
 
-if __name__ == "__main__":
-  run()
+# if __name__ == "__main__":
+#   run()

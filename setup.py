@@ -28,11 +28,12 @@ setup(
   include_package_data=True,
   install_requires=[
     "flask",
-    "waitress"
+    "pheonix-waitress"
   ],
   entry_points={
     "console_scripts": [
-      "pheonix=pheonix.__main__:main"
+      # "pheonix=pheonix.__main__:main"
+      "pheonix=pheonix.__init__:main"
     ]
   },
   license_files = ("LICENSE.md",),
