@@ -1,4 +1,4 @@
-from css_html_js_minify import html_minify, js_minify, css_minify
+from .minify import html_minify, js_minify, css_minify
 import os, mimetypes
 
 def readfile(dir, config):

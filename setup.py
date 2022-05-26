@@ -22,8 +22,7 @@ setup(
   ],
   packages=[
     "pheonix",
-    "ppm",
-    "css_html_js_minify"
+    "ppm"
   ],
   include_package_data=True,
   install_requires=[
@@ -32,7 +31,6 @@ setup(
   ],
   entry_points={
     "console_scripts": [
-      # "pheonix=pheonix.__main__:main"
       "pheonix=pheonix.__init__:main"
     ]
   },
