@@ -1,4 +1,4 @@
-VERSION = "1.0.3.2"
+VERSION = "1.0.4"
 # Get Pheonix files
 from . import build
 from ppm import PPM
@@ -8,6 +8,15 @@ from flask import Flask, Response, session, request
 from pheonix_waitress import serve as WSGI_SERVER
 import click, random, os, json, gzip, urllib, zlib, sys, time, math
 
+class Fore():
+  red = "\033[31m"
+  lightblue = "\033[94m"
+  yellow = "\033[33m"
+  lightgreen = "\033[92m"
+  blue = "\033[34m"
+  magenta = "\033[35m"
+
+  reset = "\033[39m"
 
 # Configuration
 config = { # Set default config settings
@@ -39,14 +48,14 @@ if os.path.exists("Pheonix.config.json") and os.path.isfile("Pheonix.config.json
 
 max_cpu_threads = len(os.sched_getaffinity(0))
 if config['verbose'] and config['threads'] < max_cpu_threads:
-  print(f"[Info] The server is running on {config['threads']} thread(s), while there are {max_cpu_threads} available.")
+  print(f"[{Fore.lightblue} Info {Fore.reset}] The server is running on {config['threads']} thread(s), while there are {max_cpu_threads} available.")
 
 if config['threads'] > max_cpu_threads:
-  print(f"[Error] The server was configured to run on {config['threads']} thread(s), when there are only {max_cpu_threads} available. Switching to maximum.")
+  print(f"[{Fore.red} Error {Fore.reset}] The server was configured to run on {config['threads']} thread(s), when there are only {max_cpu_threads} available. Switching to maximum.")
   config['threads'] = max_cpu_threads
 
 if config['threads'] <= 0:
-  print(f"[Error] The specified number of threads, {config['threads']}, is less than zero. Setting threads to 1")
+  print(f"[{Fore.red} Error {Fore.reset}] The specified number of threads, {config['threads']}, is less than zero. Setting threads to 1")
   config['threads'] = 1
   
 # Initate run function
@@ -77,25 +86,25 @@ def assign(app, url="/", cache={}, view_funcs=[]):
   if not url in config["nocompress"]:
     if config["zlib"] and config["gzip"]:
       if config["verbose"]:
-        print(f"[Prehost] Compressing {url} (mode: zlib, gzip)...")
+        print(f"[{Fore.lightblue} Prehost {Fore.reset}] Compressing {url} (mode: zlib, gzip)...")
       if type(cont) == str:
         cont = cont.encode(config["encoding"])
       cont = gzip.compress(zlib.compress(cont))
     elif config["zlib"]:
       if config["verbose"]:
-        print(f"[Prehost] Compressing {url} (mode: zlib)...")
+        print(f"[{Fore.lightblue} Prehost {Fore.reset}] Compressing {url} (mode: zlib)...")
       if type(cont) == str:
         cont = cont.encode(config["encoding"])
       cont = zlib.compress(cont)
     elif config["gzip"]:
       if config["verbose"]:
-        print(f"[Prehost] Compressing {url} (mode: gzip)...")
+        print(f"[{Fore.lightblue} Prehost {Fore.reset}] Compressing {url} (mode: gzip)...")
       if type(cont) == str:
         cont = cont.encode(config["encoding"])
       cont = gzip.compress(cont)
   else:
     if config["verbose"]:
-      print(f"[Prehost] Skipping compression for {url}")
+      print(f"[{Fore.lightblue} Prehost {Fore.reset}] Skipping compression for {url}")
   
   ret = Response(cont, status=200, mimetype=cache[url]["mime"])
   ret.headers["Cache-Control"] = f"max-age={config['cache-max-age']}"
@@ -105,17 +114,17 @@ def assign(app, url="/", cache={}, view_funcs=[]):
       ret.headers["Content-Length"] = len(cont)
       ret.headers["Content-Encoding"] = 'deflate, gzip'
       if config["verbose"]:
-        print(f"[Prehost] Done compressing {url} (mode: zlib, gzip)")
+        print(f"[{Fore.lightgreen} Prehost {Fore.reset}] Done compressing {url} (mode: zlib, gzip)")
     elif config["zlib"]:
       ret.headers["Content-Length"] = len(cont)
       ret.headers["Content-Encoding"] = 'deflate'
       if config["verbose"]:
-        print(f"[Prehost] Done compressing {url} (mode: zlib)")
+        print(f"[{Fore.lightgreen} Prehost {Fore.reset}] Done compressing {url} (mode: zlib)")
     elif config["gzip"]:
       ret.headers["Content-Length"] = len(cont)
       ret.headers["Content-Encoding"] = 'gzip'
       if config["verbose"]:
-        print(f"[Prehost] Done comrpessing {url} (mode: gzip)")
+        print(f"[{Fore.lightgreen} Prehost {Fore.reset}] Done comrpessing {url} (mode: gzip)")
 
   
   server_route_functions[url] = lambda : ret
@@ -139,9 +148,9 @@ def assign_proxy(app, url="/", proxy="localhost:3000", cache={}, view_funcs=[]):
           cont = cont.replace(proxy, config["thisURL"]+url)
         return cont
       else:
-        return "[Proxy] Invalid method supplied"
+        return f"[{Fore.blue} Proxy {Fore.reset}] Invalid method supplied"
     except Exception as e:
-      err = f"[Proxy] [Error] {str(e)}"
+      err = f"[{Fore.blue} Proxy {Fore.reset}] [{Fore.red} Error {Fore.reset}] {str(e)}"
       if config["verbose"]:
         print(err)
       return err
@@ -159,9 +168,9 @@ def assign_proxy(app, url="/", proxy="localhost:3000", cache={}, view_funcs=[]):
           cont = cont.replace(proxy, config["thisURL"]+url)
         return cont
       else:
-        return "[Proxy] Invalid method supplied"
+        return f"[{Fore.blue} Proxy {Fore.reset}] Invalid method supplied"
     except Exception as e:
-      err = f"[Proxy] [Error] {str(e)}"
+      err = f"[{Fore.blue} Proxy {Fore.reset}] [{Fore.red} Error {Fore.reset}] {str(e)}"
       if config["verbose"]:
         print(err)
       return err
@@ -183,33 +192,33 @@ def run(config=config):
   indexDirectories=config['indexDirectories']
   rebuild=config['canrebuild']
   
-  print("[Init] Building server...")
+  print(f"[{Fore.lightblue} Init {Fore.reset}] Building server...")
   build_time_start = time.time()
   loadextensions()
   cache = build.build(indexDirectories, config, extensions=extensions)
   
-  print("[Init] Done. Initializing server...")
+  print(f"[{Fore.lightblue} Init {Fore.reset}] Done. Initializing server...")
   app = PheonixServer(__name__)
   app.secret_key = os.urandom(16)
   if rebuild:
     @app.route("/Pheonix/rebuild")
     def Pheonix_rebuild(): # to be fixed
       if config["verbose"]:
-        print("[Rebuild] Starting rebuild.")
+        print(f"[{Fore.lightblue} Rebuild {Fore.reset}] Starting rebuild.")
       view_funcs = []
       cache = build.build(indexDirectories, config, extensions=extensions)
       for f in cache.keys():
         assign(app, f, cache, view_funcs)
       if config["verbose"]:
-        print("[Rebuild] Rebuild finished.")
+        print(f"[{Fore.magenta} Rebuild {Fore.reset}] Rebuild finished.")
       view_funcs = []
       for f in cache.keys():
         assign(app, f, cache, view_funcs)
       if config["purgecache"]:
-        print("[Clean] Clearing cache")
+        print(f"[{Fore.magenta} Clean {Fore.reset}] Clearing cache")
         del(cache)
-        print("[Clean] Done clearing cache")
-      return "[Rebuild] Rebuild finished."
+        print(f"[{Fore.magenta} Clean {Fore.reset}] Done clearing cache")
+      return f"[{Fore.magenta} Rebuild {Fore.reset}] Rebuild finished."
 
   view_funcs = []
   for f in cache.keys():
@@ -222,21 +231,21 @@ def run(config=config):
     try:
       extensions[ext].run(app, config, cache)
     except Exception as e:
-      print(f"[Error] Issue running extension {ext} in run phase: {str(e)}")
+      print(f"[ {Fore.red} Error {Fore.reset} ] Issue running extension {ext} in run phase: {str(e)}")
   
   if config["purgecache"]:
-    print("[Clean] Clearing cache")
+    print(f"[{Fore.magenta} Clean {Fore.reset}] Clearing cache")
     del(cache)
-    print("[Clean] Done clearing cache")
+    print(f"[{Fore.magenta} Clean {Fore.reset}] Done clearing cache")
   
-  print(f"[Init] Done. Starting server on port {port}...")
-  print(f"[Info] Finished in {(time.time()-build_time_start) * 1000} ms")
+  print(f"[{Fore.lightblue} Init {Fore.reset}] Done. Starting server on port {port}...")
+  print(f"[{Fore.lightblue} Info {Fore.reset}] Finished in {(time.time()-build_time_start) * 1000} ms")
   try:
     app.run(host, port, config['threads'])
   except KeyboardInterrupt:
-    print("[Stop] Terminated by user")
+    print(f"[{Fore.yellow} Stop {Fore.reset}] Terminated by user")
   except Exception as kill_err:
-    print(f"[Stop] {kill_err}")
+    print(f"[{Fore.red} Stop {Fore.reset}] {kill_err}")
 
 
 # if __name__ == "__main__":
