@@ -10,5 +10,6 @@
   },
   "gzip": false,
   "zlib": false,
-  "thisURL": "nojs.froggo8311.repl.co"
+  "thisURL": "nojs.froggo8311.repl.co",
+  "dumpCache": true
 }

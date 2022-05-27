@@ -82,7 +82,7 @@ def build(indexDirectories=False, config={}, cache={}, extensions={}):
 
   # ./phoenix/
   if os.path.exists("phoenix_files"):
-    directoryTraverse("phoenix_files/", "/phoenix/", config["indexPhoenix"], cache, config)
+    directoryTraverse("phoenix_files/modules/", "/phoenix/modules/", config["indexPhoenix"], cache, config)
 
   # ./index.html
   if os.path.exists("index.html") and os.path.isfile("index.html"):
