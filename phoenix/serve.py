@@ -6,7 +6,7 @@ from ppm import PPM
 # Get required assets
 from flask import Flask, Response, session, request
 from phoenix_waitress import serve as WSGI_SERVER
-import click, random, os, json, gzip, urllib, zlib, sys, time, math, types, subprocess
+import click, random, os, json, gzip, urllib, zlib, sys, time, math, types
 
 
 
@@ -59,19 +59,7 @@ if os.path.exists("Phoenix.config.json") and os.path.isfile("Phoenix.config.json
   for i in configcont.keys():
     config[i] = configcont[i]
 
-class popen_stdout():
-  def __init__(self):
-    self.out = None
-  def write(self, x=''):
-    self.out = x
-  def close(self):
-    pass
-  def fileno(self):
-    return 0
-
-threads_out = popen_stdout()
-subprocess.Popen('nproc', stdout=threads_out)
-max_cpu_threads = int(threads_out.out)
+max_cpu_threads = os.cpu_count()
 if 'sched_getaffinity' in os.__dir__(): 
   max_cpu_threads = len(os.sched_getaffinity(0))
 else:
