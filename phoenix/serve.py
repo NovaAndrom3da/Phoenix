@@ -1,4 +1,4 @@
-VERSION = "1.0.7"
+VERSION = "1.0.7.1"
 # Get Phoenix files
 from . import build
 from ppm import PPM
