@@ -1,0 +1,3 @@
+[console_scripts]
+phoenix = phoenix.__init__:main
+

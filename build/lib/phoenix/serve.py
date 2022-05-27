@@ -71,7 +71,8 @@ class popen_stdout():
 
 threads_out = popen_stdout()
 subprocess.Popen('nproc', stdout=threads_out)
-max_cpu_threads = int(threads_out.out)
+print(threads_out.out)
+max_cpu_threads = threads_out.out
 if 'sched_getaffinity' in os.__dir__(): 
   max_cpu_threads = len(os.sched_getaffinity(0))
 else:
