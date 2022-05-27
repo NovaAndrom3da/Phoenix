@@ -52,8 +52,8 @@ def info_out(type='Info'):
     e = fore['reset']
   return f"[ {s}{type}{e} ]"
 
-if os.path.exists("Phoenix.config.json") and os.path.isfile("Phoenix.config.json"):
-  configfile = open("Phoenix.config.json")
+if os.path.exists("config.phoenix") and os.path.isfile("config.phoenix"):
+  configfile = open("config.phoenix")
   configcont = json.loads(configfile.read())
   configfile.close()
   for i in configcont.keys():
