@@ -2,7 +2,7 @@ import pathlib
 from setuptools import setup
 from phoenix import VERSION
 
-print(f"Packaging Phoenix version {VERSION}")
+print(f"Packaging Phoenix version {VERSION}...")
 
 HERE = pathlib.Path(__file__).parent
 README = (HERE / "README.md").read_text()
