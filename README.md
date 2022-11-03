@@ -50,8 +50,8 @@ Phoenix can be configured per-project with a `phoenix.config.json` file. Here ar
 > `encoding` (`str`, `utf-8`) - Set the text encoding.
 >
 > `nocompress` (`list`, `[]`) - Disable compression on specific files. Each item of the list is the resource's URL.
-> 
-> `purgecache` (`bool`, `true`) - Clear the excess cache.
+/* > 
+   > `purgecache` (`bool`, `true`) - Clear the excess cache. */
 >
 > `minify` (`bool`, `true`) - Make HTML, CSS, and JS files smaller.
 >
@@ -60,5 +60,5 @@ Phoenix can be configured per-project with a `phoenix.config.json` file. Here ar
 > `fixProxy` (`bool`, `true`) - Replace all instances of the proxied URL with the requested URL.
 >
 > `thisURL` (`str`) - A nice name for the website hosted by the server. Used for `fixProxy`.
-> 
-> `canrebuild` - WIP
+   /* > 
+      > `canrebuild` - WIP */
