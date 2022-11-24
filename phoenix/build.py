@@ -103,6 +103,13 @@ def extensionTraverse(dir="./", urldir="/", cache={}, config={}, extensions={}):
         
 
 def build(indexDirectories=False, config={}, cache={}, extensions={}):
+  for ext in extensions.keys():
+    try:
+      extensions[ext].prebuild(config, cache)
+    except AttributeError:
+      pass
+
+
   # ./public/
   if os.path.exists("public"):
     # Traverse the public directory
