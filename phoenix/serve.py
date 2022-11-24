@@ -6,7 +6,7 @@ from ppm import PPM
 
 # Get required assets
 from flask import Flask, Response, request #,  session
-from phoenix_waitress import serve as WSGI_SERVER
+from waitress import serve as WSGI_SERVER
 import random, os, json, gzip, urllib, zlib, time, types #, math, sys
 
 
