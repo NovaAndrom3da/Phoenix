@@ -1,4 +1,4 @@
-VERSION = "2.0.0.2"
+VERSION = "2.0.0.3"
 
 # Get Phoenix files
 from . import build
