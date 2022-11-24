@@ -27,7 +27,7 @@ setup(
   include_package_data=True,
   install_requires=[
     "flask",
-    "phoenix-waitress"
+    "waitress"
   ],
   entry_points={
     "console_scripts": [
