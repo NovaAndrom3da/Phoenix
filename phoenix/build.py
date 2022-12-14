@@ -134,11 +134,11 @@ def build(indexDirectories=False, config={}, cache={}, extensions={}):
       "cont": index.read()
     }
     index.close()
-  elif not indexDirectories:
+  elif not '/' in cache.keys() and not indexDirectories:
     # If indexDirectories is false, add a default index.html file to the cache
     cache["/"] = {
       "mime": "text/html",
-      "cont": "<!DOCTYPE html>\n<html><head></head><body></body></html>"
+      "cont": "<!DOCTYPE html>\n<html><head><!-- Default Phoenix Webpage --></head><body></body></html>"
     }
 
   for ext in extensions.keys():
